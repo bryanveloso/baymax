@@ -1,5 +1,9 @@
-var irc = require('twitch-irc');
+// Environment loading.
+var dotenv = require('dotenv');
+dotenv.load();
 
+// Twitch IRC.
+var irc = require('twitch-irc');
 var client = new irc.client({
   options: {
     debug: true,
