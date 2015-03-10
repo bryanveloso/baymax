@@ -4,6 +4,7 @@ var client = new irc.client({
   options: {
     debug: true,
     debugIgnore: ['ping'],
+    debugDetails: true,
     logging: true,
   },
   identity: {
