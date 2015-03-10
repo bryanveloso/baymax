@@ -11,7 +11,7 @@ var client = new irc.client({
     username: process.env.TWITCH_IRC_USERNAME,
     password: process.env.TWITCH_IRC_PASSWORD
   },
-  channels: [process.env.TWITCH_IRC_ROOMS.split(',')]
+  channels: [process.env.TWITCH_IRC_ROOMS]
 });
 
 client.connect();
