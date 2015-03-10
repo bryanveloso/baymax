@@ -1,0 +1,21 @@
+{
+  "name": "baymax",
+  "version": "0.1.0",
+  "description": "Your personal Twitch companion.",
+  "private": true,
+  "dependencies": {
+    "coffee-script": "^1.9.1",
+    "twitch-irc": "latest"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bryanveloso/baymax.git"
+  },
+  "author": "Bryan Veloso",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bryanveloso/baymax/issues"
+  },
+  "homepage": "https://github.com/bryanveloso/baymax"
+}
