@@ -36,25 +36,41 @@ client.connect()
 replaceBetween = (start, end, what) ->
   @substring(0, start) + what + @substring(end)
 
+# handleChatter().
+handleChatter = (username) ->
+  viewers = firebase.child('viewers')
+  viewers.child(username).once 'value', (snapshot) ->
+    unless snapshot.val()?
+      robot.http("https://api.twitch.tv/kraken/users/#{username}").get() (err, res, body) ->
+        json = {'display_name': body.display_name or username, 'username': username}
+        viewers.child(username).set json, (error) ->
+          console.log "#{username} has been added to Firebase."
+
 # handleMessage().
 handleMessage = (channel, user, message, is_action) ->
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
-  paylaod =
-    # User data.
-    'username': user.username
-    'display_name': user.username  # TODO: Change this.
-    'color': user.color or '#ffffff'
-    'roles': _.uniq(user.special)
+  firebase.child('viewers').child(user.username).once 'value', (snapshot) ->
+    data = snapshot.val() or []
+    payload =
+      # User data.
+      'username': user.username
+      'display_name': data?.display_name or user.username
+      'color': user.color or '#ffffff'
+      'roles': _.uniq(user.special)
 
-    # Message data.
-    'message': message
-    'timestamp': _.now()
-    'is_action': is_action
+      # Message data.
+      'message': message
+      'timestamp': _.now()
+      'is_action': is_action
 
-  # Send the message to firebase!
-  messages = firebase.child('messages').push()
-  messages.setWithPriority payload, _.now()
+      # Payload version.
+      # This is mainly so we can pick out which messages are which in Firebase.
+      'version': '2'
+
+    # Send the message to firebase!
+    messages = firebase.child('messages').push()
+    messages.setWithPriority payload, _.now()
 
   console.log message
   console.log _.uniq(user.special)  # Special statuses for the user.
