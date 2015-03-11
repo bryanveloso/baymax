@@ -72,19 +72,21 @@ handleMessage = (channel, user, message, is_action) ->
     messages = firebase.child('messages').push()
     messages.setWithPriority payload, _.now()
 
-  console.log message
-  console.log _.uniq(user.special)  # Special statuses for the user.
-  console.log user.emote  # Emoticons.
-  console.log user.color  # Colors.
-
 # Listeners. Events sent to 'action' or 'chat' are sent to handleMessage().
 # They're both essentially the same except for the fact that we mark one
 # as an action and the other not.
 client.addListener 'action', (channel, user, message) ->
+  handleChatter user.username
   handleMessage channel, user, message, true
 
 client.addListener 'chat', (channel, user, message) ->
+  handleChatter user.username
   handleMessage channel, user, message, false
+
+  console.log message
+  console.log _.uniq(user.special)  # Special statuses for the user.
+  console.log user.emote  # Emoticons.
+  console.log user.color  # Colors.
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
