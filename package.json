@@ -8,6 +8,7 @@
     "coffee-script": "^1.9.1",
     "dotenv": "^0.5.1",
     "firebase": "^2.2.2",
+    "lodash": "^3.5.0",
     "pusher": "^1.0.4",
     "twitch-irc": "latest"
   },
