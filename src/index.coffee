@@ -32,9 +32,64 @@ client = new irc.client(
 client.connect()
 
 # Logging.
-# replaceBetween().
-replaceBetween = (start, end, what) ->
-  @substring(0, start) + what + @substring(end)
+# orderEmoticons().
+orderEmoticons = (emoticons) ->
+  emotes = Object.keys(emoticons)
+  replacements = []
+
+  emotes.forEach (id) ->
+    emote = emoticons[id]
+    i = emote.length - 1
+    while i >= 0
+      position = emote[i].split('-')
+      replacements.push {'id': id, 'index': [parseInt(position[0], 10), parseInt(position[1], 10)]}
+      i--
+
+  replacements.sort (a, b) ->
+    return b.index[0] - a.index[0]
+  return replacements
+
+# emoticonize().
+emoticonize = (tokens, emoticons) ->
+  if tokens and emoticons
+    emoticons = orderEmoticons(emoticons)
+    emoticons.reverse()
+    console.log emoticons
+
+    getLengthOfToken = (token) ->
+      return token.length
+
+    tokenizedMessage = _.reduce(emoticons, ((tokens, emoticon) ->
+      # Since emoticons are ordered in order of last appearance to first, we can
+      # expect the first token to always contain the next emoticon.
+      newTokens = []
+      token = tokens.shift()
+      counter = 0
+
+      # For every token, check the length of the token and if it is less than the
+      # index of the emoticon, grab the next token and add to the counter.
+      while counter + getLengthOfToken(token) - 1 < emoticon.index[0]
+        newTokens.push token
+        counter += getLengthOfToken(token)
+        token = tokens.shift()
+
+      if !_.isObject(token)
+        newTokens.push token.slice(0, emoticon.index[0] - counter)
+        newTokens.push
+          emoticonSrc: "http://static-cdn.jtvnw.net/emoticons/v1/#{emoticon.id}/1.0"
+          altText: token.slice(emoticon.index[0] - counter, emoticon.index[1] + 1 - counter)
+        newTokens.push token.slice(emoticon.index[1] + 1 - counter)
+        newTokens = newTokens.concat(tokens)
+      else
+        newTokens = newTokens.concat(token, tokens)
+      console.log newTokens
+      return newTokens
+    ), tokens)
+
+    if tokenizedMessage[tokenizedMessage.length - 1] == ''
+      tokenizedMessage.pop()
+    return tokenizedMessage
+  return tokens
 
 # handleChatter().
 handleChatter = (username) ->
@@ -48,6 +103,33 @@ handleChatter = (username) ->
 
 # handleMessage().
 handleMessage = (channel, user, message, is_action) ->
+  # Emoticonize the message first.
+  console.log "Original message: #{message}"
+
+  tokens = [message]
+  tokenizedMessage = emoticonize(tokens, user.emote)
+  console.log "Tokenized message: #{tokenizedMessage}"
+
+  # emoticons = user.emote
+  # flattened = _.reduce(emoticons, ((flattened, indiciesToReplace, emoticonId) ->
+  #   indiciesToReplace = (index.split('-') for index in indiciesToReplace)
+  #   if _.isArray(indiciesToReplace[0])
+  #     indiciesToReplace.forEach (index) ->
+  #       flattened.push
+  #         emoticonId: emoticonId
+  #         index: index
+  #       return
+  #   else
+  #     flattened.push
+  #       emoticonId: emoticonId
+  #       index: indiciesToReplace
+  #     return flattened
+  # ), [])
+  # console.log flattened
+
+  # console.log message
+  # console.log _.uniq(user.special)  # Special statuses for the user.
+
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
   firebase.child('viewers').child(user.username).once 'value', (snapshot) ->
@@ -82,11 +164,6 @@ client.addListener 'action', (channel, user, message) ->
 client.addListener 'chat', (channel, user, message) ->
   handleChatter user.username
   handleMessage channel, user, message, false
-
-  console.log message
-  console.log _.uniq(user.special)  # Special statuses for the user.
-  console.log user.emote  # Emoticons.
-  console.log user.color  # Colors.
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
