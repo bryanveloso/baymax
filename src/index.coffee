@@ -110,7 +110,7 @@ handleMessage = (channel, user, message, is_action) ->
 
   # Tokenize and emoticonize the message first.
   tokenizedMessage = emoticonize([message], user.emote)
-  console.log "Processed message: " + tokenizedMessage
+  console.log "Processed message: " + tokenizedMessage.join('')
 
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
