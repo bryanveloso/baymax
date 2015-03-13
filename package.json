@@ -1,6 +1,6 @@
 {
   "name": "baymax",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Your personal Twitch companion.",
   "main": "src/index.js",
   "private": true,
