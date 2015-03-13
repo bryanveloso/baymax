@@ -1,1 +1,1 @@
-app: node src/index.js
+app: coffee src/index.coffee
