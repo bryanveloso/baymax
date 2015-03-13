@@ -4,8 +4,11 @@ _ = require('lodash')
 dotenv = require('dotenv')
 dotenv.load()
 
+# Request.
+request = require('request')
+
 # Firebase.
-Firebase = require 'firebase'
+Firebase = require('firebase')
 firebase = new Firebase 'https://avalonstar.firebaseio.com/'
 
 # Pusher configuration.
@@ -97,18 +100,19 @@ handleChatter = (username) ->
   viewers = firebase.child('viewers')
   viewers.child(username).once 'value', (snapshot) ->
     unless snapshot.val()?
-      request.get "https://api.twitch.tv/kraken/users/#{username}", (err, res, body) ->
+      options =
+        url: "https://api.twitch.tv/kraken/users/#{username}"
+        headers: 'Content-Type': 'application/json'
+      request.get options, (err, res, body) ->
+        body = JSON.parse(body)
         json = {'display_name': body.display_name or username, 'username': username}
         viewers.child(username).set json, (error) ->
-          console.log "#{username} has been added to Firebase."
+          client.logger.info "#{username} has been added to Firebase."
 
 # handleMessage().
 handleMessage = (channel, user, message, is_action) ->
-  console.log "Original message: #{message}"
-
   # Tokenize and emoticonize the message first.
   tokenizedMessage = emoticonize([message], user.emote)
-  console.log "Processed message: " + tokenizedMessage.join('')
 
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
@@ -147,9 +151,91 @@ client.addListener 'chat', (channel, user, message) ->
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
+  # First, push the data to Pusher to power the notification.
   pusher.trigger 'live', 'hosted',
     username: username
+  client.logger.info "We've been hosted by #{username}."
+
+  # Get the status of the Episode from the API.
+  request.get 'http://avalonstar.tv/live/status/', (err, res, body) ->
+    episode = JSON.parse(body)
+
+    # Let's record this host to the Avalonstar API -if- and only if the
+    # episode is marked as episodic.
+    if episode.is_episodic
+      json = JSON.stringify
+        'broadcast': episode.number
+        'hoster': username
+        'timestamp': new Date(Date.now()).toISOString()
+      options =
+        form: json
+        url: "http://avalonstar.tv/api/tickets/#{username}"
+        headers: 'Content-Type': 'application/json'
+      request.post options, (err, res, body) ->
+        if err
+          client.logger.error "The host by #{username} couldn't be recorded: #{body}"
+          return
+        client.logger.info "The host by #{username} was recorded: #{body}"
+
+# Subscriptions.
+# activateSubscriber().
+activateSubscriber = (username, callback) ->
+  # Take the name and push it on through.
+  puser.trigger 'live', 'resubscribed',
+    username: username
+  client.logger.info "#{username} has just re-subscribed!"
+
+  # Update the ticket using the API.
+  json = JSON.stringify
+    'is_active': true
+  options =
+    form: json
+    url: "http://avalonstar.tv/api/tickets/#{username}"
+    headers: 'Content-Type': 'application/json'
+  request.post options, (err, res, body) ->
+    # Success message.
+    ticket = JSON.parse(body)
+    statusCode = res.statusCode
+    callback ticket, statusCode
+
+# addSubscriber().
+addSubscriber = (username, callback) ->
+  # Take the name and push it on through.
+  pusher.trigger 'live', 'subscribed',
+    username: username
+  client.logger.info "#{username} has just subscribed!"
+
+  # Create the ticket using the API.
+  json = JSON.stringify
+    'name': username
+    'is_active': true
+  options =
+    form: json
+    url: 'http://avalonstar.tv/api/tickets/'
+    headers: 'Content-Type': 'application/json'
+  request.post options, (err, res, body) ->
+    # Success message.
+    ticket = JSON.parse(body)
+    statusCode = res.statusCode
+    callback ticket, statusCode
 
 client.addListener 'subscription', (channel, username) ->
+  request.get "http://avalonstar.tv/api/tickets/#{username}/", (err, res, body) ->
+    # This is a re-subscription.
+    # The user has been found in the API; they've been a subscriber.
+    if res.statusCode is 200
+      activateSubscriber username, (ticket, status) ->
+        client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
+      return
+    # This is a new subscription.
+    # The user hasn't been found in the API, so let's create it.
+    else if res.statusCode is 404
+      addSubscriber username, (ticket, status) ->
+        client.logger.info "#{username}'s ticket added successfully." if status is 200
+      return
 
 client.addListener 'subanniversary', (channel, username, months) ->
+  pusher.trigger 'live', 'substreaked',
+    username: username
+    length: months
+  client.logger.info "#{username} has been subscribed for #{months} months!"
