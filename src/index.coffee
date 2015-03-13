@@ -106,33 +106,11 @@ handleChatter = (username) ->
 
 # handleMessage().
 handleMessage = (channel, user, message, is_action) ->
-  # Emoticonize the message first.
   console.log "Original message: #{message}"
 
-  tokens = [message]
-  tokenizedMessage = emoticonize(tokens, user.emote)
-  console.log tokenizedMessage
-  console.log "Tokenized message: " + tokenizedMessage.join('')
-
-  # emoticons = user.emote
-  # flattened = _.reduce(emoticons, ((flattened, indiciesToReplace, emoticonId) ->
-  #   indiciesToReplace = (index.split('-') for index in indiciesToReplace)
-  #   if _.isArray(indiciesToReplace[0])
-  #     indiciesToReplace.forEach (index) ->
-  #       flattened.push
-  #         emoticonId: emoticonId
-  #         index: index
-  #       return
-  #   else
-  #     flattened.push
-  #       emoticonId: emoticonId
-  #       index: indiciesToReplace
-  #     return flattened
-  # ), [])
-  # console.log flattened
-
-  # console.log message
-  # console.log _.uniq(user.special)  # Special statuses for the user.
+  # Tokenize and emoticonize the message first.
+  tokenizedMessage = emoticonize([message], user.emote)
+  console.log "Processed message: " + tokenizedMessage
 
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
@@ -146,7 +124,7 @@ handleMessage = (channel, user, message, is_action) ->
       'roles': _.uniq(user.special)
 
       # Message data.
-      'message': message
+      'message': tokenizedMessage.join('')
       'timestamp': _.now()
       'is_action': is_action
 
