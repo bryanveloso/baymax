@@ -84,13 +84,11 @@ emoticonize = (tokens, emoticons) ->
         newTokens = newTokens.concat(tokens)
       else
         newTokens = newTokens.concat(token, tokens)
-      console.log newTokens
       return newTokens
     ), tokens)
 
     if tokenizedMessage[tokenizedMessage.length - 1] == ''
       tokenizedMessage.pop()
-    console.log tokenizedMessage
     return tokenizedMessage
   return tokens
 
