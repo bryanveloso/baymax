@@ -99,7 +99,7 @@ handleChatter = (username) ->
   viewers = firebase.child('viewers')
   viewers.child(username).once 'value', (snapshot) ->
     unless snapshot.val()?
-      robot.http("https://api.twitch.tv/kraken/users/#{username}").get() (err, res, body) ->
+      request.get "https://api.twitch.tv/kraken/users/#{username}", (err, res, body) ->
         json = {'display_name': body.display_name or username, 'username': username}
         viewers.child(username).set json, (error) ->
           console.log "#{username} has been added to Firebase."

@@ -10,6 +10,7 @@
     "firebase": "^2.2.2",
     "lodash": "^3.5.0",
     "pusher": "^1.0.4",
+    "request": "^2.53.0",
     "twitch-irc": "latest"
   },
   "devDependencies": {},
