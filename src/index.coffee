@@ -53,8 +53,11 @@ orderEmoticons = (emoticons) ->
 emoticonize = (tokens, emoticons) ->
   if tokens and emoticons
     emoticons = orderEmoticons(emoticons)
-    emoticons.reverse()
-    console.log emoticons
+
+    imgTemplate = (id) ->
+      src = "http://static-cdn.jtvnw.net/emoticons/v1/#{id}/1.0"
+      srcset = "http://static-cdn.jtvnw.net/emoticons/v1/#{id}/2.0 2x"
+      return "<img class=\"emo-#{id} emoticon\" src=\"#{src}\" srcset=\"#{srcset}\">"
 
     getLengthOfToken = (token) ->
       return token.length
@@ -74,10 +77,9 @@ emoticonize = (tokens, emoticons) ->
         token = tokens.shift()
 
       if !_.isObject(token)
+        # alttext = token.slice(emoticon.index[0] - counter, emoticon.index[1] + 1 - counter)
         newTokens.push token.slice(0, emoticon.index[0] - counter)
-        newTokens.push
-          emoticonSrc: "http://static-cdn.jtvnw.net/emoticons/v1/#{emoticon.id}/1.0"
-          altText: token.slice(emoticon.index[0] - counter, emoticon.index[1] + 1 - counter)
+        newTokens.push imgTemplate emoticon.id
         newTokens.push token.slice(emoticon.index[1] + 1 - counter)
         newTokens = newTokens.concat(tokens)
       else
@@ -88,6 +90,7 @@ emoticonize = (tokens, emoticons) ->
 
     if tokenizedMessage[tokenizedMessage.length - 1] == ''
       tokenizedMessage.pop()
+    console.log tokenizedMessage
     return tokenizedMessage
   return tokens
 
@@ -108,7 +111,8 @@ handleMessage = (channel, user, message, is_action) ->
 
   tokens = [message]
   tokenizedMessage = emoticonize(tokens, user.emote)
-  console.log "Tokenized message: #{tokenizedMessage}"
+  console.log tokenizedMessage
+  console.log "Tokenized message: " + tokenizedMessage.join('')
 
   # emoticons = user.emote
   # flattened = _.reduce(emoticons, ((flattened, indiciesToReplace, emoticonId) ->
