@@ -256,5 +256,5 @@ client.addListener 'timeout', (channel, username) ->
         # wrong username please.
         username = message.child('username').val()
         if username is username
-          client.logger.debug "\"#{message.child('message').val()}\" by #{username} has been purged."
+          client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
           message.ref().child('is_purged').set(true)
