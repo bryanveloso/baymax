@@ -242,16 +242,16 @@ client.addListener 'subanniversary', (channel, username, months) ->
 
 # Cleared chat.
 client.addListener 'timeout', (channel, username) ->
-  messages = firebase.child('messages')
-
   # CLEARCHAT without a name will clear the entire chat on Twitch web. Do not
   # respect that, lest we purge things that we don't want to purge.
+  message = firebase.child('messages')
   if username
-    # Find the last five messages from the user to purge (we don't choose
+    # Find the last ten messages from the user to purge (we don't choose
     # more because a purge will rarely cover that many lines).
-    messages.orderByChild('username').endAt(username).limitToLast(10).once 'value', (snapshot) ->
+    message.orderByChild('username').endAt(username).limitToLast(10).once 'value', (snapshot) ->
+      snapshot = snapshot.val()
       snapshot.forEach (message) ->
-        # Because of Firebase quirks, if it finds less than 5 results for the
+        # Because of Firebase quirks, if it finds less than 10 results for the
         # username, it will find similarly spelled results. Let's not purge the
         # wrong username please.
         username = message.child('username').val()
