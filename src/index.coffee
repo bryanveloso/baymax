@@ -221,6 +221,21 @@ addSubscriber = (username, callback) ->
     statusCode = res.statusCode
     callback ticket, statusCode
 
+postSubscriberMessage = (message) ->
+  payload =
+    # User data.
+    'username': 'twitchnotify'
+    'display_name': 'twitchnotify'
+    'color': '#ffffff'
+    'message': message
+    'timestamp': _.now()
+    'is_action': false
+    'version': '2'
+
+  # Send the message to firebase!
+  messages = firebase.child('messages').push()
+  messages.setWithPriority payload, _.now()
+
 client.addListener 'subscription', (channel, username) ->
   request.get "http://avalonstar.tv/api/tickets/#{username}/", (err, res, body) ->
     # This is a re-subscription.
@@ -228,12 +243,14 @@ client.addListener 'subscription', (channel, username) ->
     if res.statusCode is 200
       activateSubscriber username, (ticket, status) ->
         client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
+        postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
     # This is a new subscription.
     # The user hasn't been found in the API, so let's create it.
     else if res.statusCode is 404
       addSubscriber username, (ticket, status) ->
         client.logger.info "#{username}'s ticket added successfully." if status is 200
+        postSubscriberMessage "#{username} just subscribed! Welcome to the Crusaders!"
       return
 
 client.addListener 'subanniversary', (channel, username, months) ->
@@ -241,6 +258,7 @@ client.addListener 'subanniversary', (channel, username, months) ->
     username: username
     length: months
   client.logger.info "#{username} has been subscribed for #{months} months!"
+  postSubscriberMessage "#{username}, thank you for your #{months} as a Crusader!"
 
 # Cleared chat.
 client.addListener 'timeout', (channel, username) ->
