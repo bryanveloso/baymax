@@ -287,15 +287,12 @@ client.addListener 'timeout', (channel, username) ->
 http = require('http')
 server = http.createServer((request, response) ->
   response.writeHead 200, 'Content-Type': 'application/json'
-  response.write '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
-  response.end()
-)
-server.listen(process.env.PORT || 8888);
+  response.end '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
+).listen(process.env.PORT || 8888);
 
 # Ping it.
 cronJob = client.utils.cronjobs('0 */5 * * * *', ->
   request.get 'https://baymax.herokuapp.com/', (error, response, body) ->
     if !error and response.statusCode == 200
       console.log 'Heroku application pinged.'
-)
-cronJob.start()
+).start()
