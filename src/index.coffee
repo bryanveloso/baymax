@@ -150,7 +150,7 @@ client.addListener 'chat', (channel, user, message) ->
   handleMessage channel, user, message, false
 
 client.addListener 'join', (channel, username) ->
-  handleChatter user.username
+  handleChatter username
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
