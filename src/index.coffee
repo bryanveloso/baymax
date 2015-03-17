@@ -25,6 +25,9 @@ client = new irc.client(
     debug: true
     debugIgnore: [ 'ping' ]
     logging: true
+  connection:
+    preferredServer: '199.9.250.229'
+    preferredPort: 80
   identity:
     username: process.env.TWITCH_IRC_USERNAME
     password: process.env.TWITCH_IRC_PASSWORD
