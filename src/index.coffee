@@ -144,12 +144,13 @@ handleMessage = (channel, user, message, is_action) ->
 # They're both essentially the same except for the fact that we mark one
 # as an action and the other not.
 client.addListener 'action', (channel, user, message) ->
-  handleChatter user.username
   handleMessage channel, user, message, true
 
 client.addListener 'chat', (channel, user, message) ->
-  handleChatter user.username
   handleMessage channel, user, message, false
+
+client.addListener 'join', (channel, username) ->
+  handleChatter user.username
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
