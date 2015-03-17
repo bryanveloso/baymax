@@ -1,1 +1,1 @@
-app: coffee src/index.coffee
+web: coffee src/index.coffee
