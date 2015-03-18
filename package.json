@@ -11,7 +11,7 @@
     "lodash": "^3.5.0",
     "pusher": "^1.0.4",
     "request": "^2.53.0",
-    "twitch-irc": "latest"
+    "twitch-irc": "^1.2.5"
   },
   "devDependencies": {},
   "repository": {
