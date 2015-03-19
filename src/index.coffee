@@ -163,7 +163,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
     # Let's record this host to the Avalonstar API -if- and only if the
     # episode is marked as episodic.
     if episode.is_episodic
-      json = JSON.stringify
+      json =
         'broadcast': episode.number
         'hoster': username
         'timestamp': new Date(Date.now()).toISOString()
@@ -186,7 +186,7 @@ activateSubscriber = (username, callback) ->
   client.logger.info "#{username} has just re-subscribed!"
 
   # Update the ticket using the API.
-  json = JSON.stringify
+  json =
     'is_active': true
   options =
     form: json
@@ -206,7 +206,7 @@ addSubscriber = (username, callback) ->
   client.logger.info "#{username} has just subscribed!"
 
   # Create the ticket using the API.
-  json = JSON.stringify
+  json =
     'name': username
     'is_active': true
   options =
