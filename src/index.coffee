@@ -169,7 +169,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
         'timestamp': new Date(Date.now()).toISOString()
       options =
         form: json
-        url: "http://avalonstar.tv/api/hosts/"
+        url: 'http://avalonstar.tv/api/hosts/'
         headers: 'Content-Type': 'application/json'
       request.post options, (err, res, body) ->
         if err
