@@ -168,7 +168,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
         'hoster': username
         'timestamp': new Date(Date.now()).toISOString()
       options =
-        body: json
+        form: json
         url: 'http://avalonstar.tv/api/hosts/'
         headers: 'Content-Type': 'application/json'
       request.post options, (err, res, body) ->
@@ -189,7 +189,7 @@ activateSubscriber = (username, callback) ->
   json = JSON.stringify
     'is_active': true
   options =
-    body: json
+    form: json
     url: "http://avalonstar.tv/api/tickets/#{username}/"
     headers: 'Content-Type': 'application/json'
   request.post options, (err, res, body) ->
@@ -210,7 +210,7 @@ addSubscriber = (username, callback) ->
     'name': username
     'is_active': true
   options =
-    body: json
+    form: json
     url: 'http://avalonstar.tv/api/tickets/'
     headers: 'Content-Type': 'application/json'
   request.post options, (err, res, body) ->
