@@ -166,7 +166,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
       json =
         'broadcast': episode.number
         'hoster': username
-        'timestamp': new Date(Date.now()).toISOString()
+        'timestamp': new Date(_.now()).toISOString()
       options =
         form: json
         url: 'http://avalonstar.tv/api/hosts/'
@@ -188,6 +188,7 @@ activateSubscriber = (username, callback) ->
   # Update the ticket using the API.
   json =
     'is_active': true
+    'subscribed': new Date(_.now()).toISOString()
   options =
     form: json
     url: "http://avalonstar.tv/api/tickets/#{username}/"
