@@ -292,5 +292,4 @@ server = http.createServer((request, response) ->
 cronJob = client.utils.cronjobs('0 */5 * * * *', ->
   request.get 'https://baymax.herokuapp.com/', (error, response, body) ->
     if !error and response.statusCode == 200
-      console.log 'Heroku application pinged.'
 ).start()
