@@ -290,6 +290,5 @@ server = http.createServer((request, response) ->
 
 # Ping it.
 cronJob = client.utils.cronjobs('0 */5 * * * *', ->
-  request.get 'https://baymax.herokuapp.com/', (error, response, body) ->
-    if !error and response.statusCode == 200
+  request.get 'https://baymax.herokuapp.com/'
 ).start()
