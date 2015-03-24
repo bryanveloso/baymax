@@ -257,7 +257,7 @@ client.addListener 'subanniversary', (channel, username, months) ->
     username: username
     length: months
   client.logger.info "#{username} has been subscribed for #{months} months!"
-  postSubscriberMessage "#{username}, thank you for your #{months} as a Crusader!"
+  postSubscriberMessage "#{username}, thank you for your #{months} months as a Crusader!"
 
 # Cleared chat.
 client.addListener 'timeout', (channel, username) ->
