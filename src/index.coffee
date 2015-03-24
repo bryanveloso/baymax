@@ -161,21 +161,21 @@ client.addListener 'hosted', (channel, username, viewers) ->
     episode = JSON.parse(body)
 
     # Let's record this host to the Avalonstar API -if- and only if the
-    # episode is marked as episodic.
-    if episode.is_episodic
-      json =
-        'broadcast': episode.number
-        'hoster': username
-        'timestamp': new Date(_.now()).toISOString()
-      options =
-        form: json
-        url: 'http://avalonstar.tv/api/hosts/'
-        headers: 'Content-Type': 'application/json'
-      request.post options, (err, res, body) ->
-        if err
-          client.logger.error "The host by #{username} couldn't be recorded: #{body}"
-          return
-        client.logger.info "The host by #{username} was recorded: #{body}"
+    # episode is marked as episodic. (TODO: Switch this back.)
+    # if episode.is_episodic
+    json =
+      'broadcast': episode.number
+      'hoster': username
+      'timestamp': new Date(_.now()).toISOString()
+    options =
+      form: json
+      url: 'http://avalonstar.tv/api/hosts/'
+      headers: 'Content-Type': 'application/json'
+    request.post options, (err, res, body) ->
+      if err
+        client.logger.error "The host by #{username} couldn't be recorded: #{body}"
+        return
+      client.logger.info "The host by #{username} was recorded: #{body}"
 
 # Subscriptions.
 # activateSubscriber().
