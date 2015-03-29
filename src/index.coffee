@@ -23,8 +23,9 @@ irc = require('twitch-irc')
 client = new irc.client(
   options:
     debug: true
-    debugIgnore: [ 'chat', 'ping' ]
+    debugIgnore: [ 'action', 'chat', 'ping' ]
     logging: true
+    exitOnError: false
   identity:
     username: process.env.TWITCH_IRC_USERNAME
     password: process.env.TWITCH_IRC_PASSWORD
