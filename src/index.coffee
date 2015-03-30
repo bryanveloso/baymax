@@ -209,7 +209,7 @@ addSubscriber = (username, callback) ->
 
   # Create the ticket using the API.
   json =
-    'name': username
+    'name': username.toLowerCase()
     'is_active': true
   options =
     form: json
