@@ -189,7 +189,7 @@ activateSubscriber = (username, callback) ->
   # Update the ticket using the API.
   json =
     'is_active': true
-    'subscribed': new Date(_.now()).toISOString()
+    'updated': new Date(_.now()).toISOString()
   options =
     form: json
     url: "http://avalonstar.tv/api/tickets/#{username}/"
@@ -211,6 +211,7 @@ addSubscriber = (username, callback) ->
   json =
     'name': username.toLowerCase()
     'is_active': true
+    'created': new Date(_.now()).toISOString()
   options =
     form: json
     url: 'http://avalonstar.tv/api/tickets/'
