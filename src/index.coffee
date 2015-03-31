@@ -209,7 +209,7 @@ addSubscriber = (username, callback) ->
 
   # Create the ticket using the API.
   json =
-    'name': username.toLowerCase()
+    'name': username
     'is_active': true
     'created': new Date(_.now()).toISOString()
   options =
@@ -238,18 +238,18 @@ postSubscriberMessage = (message) ->
   messages.setWithPriority payload, _.now()
 
 client.addListener 'subscription', (channel, username) ->
-  request.get "http://avalonstar.tv/api/tickets/#{username}/", (err, res, body) ->
+  request.get "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/", (err, res, body) ->
     # This is a re-subscription.
     # The user has been found in the API; they've been a subscriber.
     if res.statusCode is 200
-      activateSubscriber username, (ticket, status) ->
+      activateSubscriber username.toLowerCase(), (ticket, status) ->
         client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
         postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
     # This is a new subscription.
     # The user hasn't been found in the API, so let's create it.
     else if res.statusCode is 404
-      addSubscriber username, (ticket, status) ->
+      addSubscriber username.toLowerCase(), (ticket, status) ->
         client.logger.info "#{username}'s ticket added successfully." if status is 200
         postSubscriberMessage "#{username} just subscribed! Welcome to the Crusaders!"
       return
