@@ -212,6 +212,7 @@ addSubscriber = (username, callback) ->
     'name': username
     'is_active': true
     'created': new Date(_.now()).toISOString()
+    'updated': new Date(_.now()).toISOString()
   options =
     form: json
     url: 'http://avalonstar.tv/api/tickets/'
