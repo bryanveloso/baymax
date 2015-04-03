@@ -182,7 +182,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
 # activateSubscriber().
 activateSubscriber = (username, callback) ->
   # Take the name and push it on through.
-  puser.trigger 'live', 'resubscribed',
+  pusher.trigger 'live', 'resubscribed',
     username: username
   client.logger.info "#{username} has just re-subscribed!"
 
