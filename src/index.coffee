@@ -278,7 +278,7 @@ client.addListener 'subscription', (channel, username) ->
       return
 
 client.addListener 'subanniversary', (channel, username, months) ->
-  addSubscriber username.toLowerCase(), months, (ticket, status) ->
+  updateSubstreak username.toLowerCase(), months, (ticket, status) ->
     client.logger.info "#{username}'s substreak added successfully." if status is 200
     postSubscriberMessage "#{username}, thank you for your #{months} months as a Crusader!"
   return
