@@ -166,7 +166,7 @@ client.addListener 'hosted', (channel, username, viewers) ->
     # if episode.is_episodic
     json =
       'broadcast': episode.number
-      'hoster': username
+      'username': username
       'timestamp': new Date(_.now()).toISOString()
     options =
       form: json
