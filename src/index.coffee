@@ -284,17 +284,17 @@ client.addListener 'subanniversary', (channel, username, months) ->
   return
 
 # Cleared chat.
-client.addListener 'timeout', (channel, username) ->
-  client.logger.info "DEBUG: Timeout called on #{username}."
+# client.addListener 'timeout', (channel, username) ->
+#   client.logger.info "DEBUG: Timeout called on #{username}."
 
-  # Find the last ten messages from the user to purge (we don't choose
-  # more because a purge will rarely cover that many lines).
-  message = firebase.child('messages')
-  message.orderByChild('username').equalTo(username).limitToLast(10).once 'value', (snapshot) ->
-    snapshot = snapshot.val()
-    snapshot.forEach (message) ->
-      client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
-      message.ref().child('is_purged').set(true)
+#   # Find the last ten messages from the user to purge (we don't choose
+#   # more because a purge will rarely cover that many lines).
+#   message = firebase.child('messages')
+#   message.orderByChild('username').equalTo(username).limitToLast(10).once 'value', (snapshot) ->
+#     snapshot = snapshot.val()
+#     snapshot.forEach (message) ->
+#       client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
+#       message.ref().child('is_purged').set(true)
 
 # Miscellaneous.
 # The bot will also launch a webserver that we can ping to keep the application
