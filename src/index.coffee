@@ -285,22 +285,16 @@ client.addListener 'subanniversary', (channel, username, months) ->
 
 # Cleared chat.
 client.addListener 'timeout', (channel, username) ->
-  # CLEARCHAT without a name will clear the entire chat on Twitch web. Do not
-  # respect that, lest we purge things that we don't want to purge.
+  client.logger.info "DEBUG: Timeout called on #{username}."
+
+  # Find the last ten messages from the user to purge (we don't choose
+  # more because a purge will rarely cover that many lines).
   message = firebase.child('messages')
-  if username
-    # Find the last ten messages from the user to purge (we don't choose
-    # more because a purge will rarely cover that many lines).
-    message.orderByChild('username').endAt(username).limitToLast(10).once 'value', (snapshot) ->
-      snapshot = snapshot.val()
-      snapshot.forEach (message) ->
-        # Because of Firebase quirks, if it finds less than 10 results for the
-        # username, it will find similarly spelled results. Let's not purge the
-        # wrong username please.
-        username = message.child('username').val()
-        if username is username
-          client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
-          message.ref().child('is_purged').set(true)
+  message.orderByChild('username').equalTo(username).limitToLast(10).once 'value', (snapshot) ->
+    snapshot = snapshot.val()
+    snapshot.forEach (message) ->
+      client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
+      message.ref().child('is_purged').set(true)
 
 # Miscellaneous.
 # The bot will also launch a webserver that we can ping to keep the application
