@@ -192,7 +192,7 @@ activateSubscriber = (username, callback) ->
     'updated': new Date(_.now()).toISOString()
   options =
     form: json
-    url: "http://avalonstar.tv/api/tickets/#{username}/"
+    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
     headers: 'Content-Type': 'application/json'
   request.patch options, (err, res, body) ->
     # Success message.
@@ -237,7 +237,7 @@ updateSubstreak = (username, months, callback) ->
     'streak': months
   options =
     form: json
-    url: "http://avalonstar.tv/api/tickets/#{username}/"
+    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
     headers: 'Content-Type': 'application/json'
   request.patch options, (err, res, body) ->
     # Success message.
@@ -265,14 +265,14 @@ client.addListener 'subscription', (channel, username) ->
     # This is a re-subscription.
     # The user has been found in the API; they've been a subscriber.
     if res.statusCode is 200
-      activateSubscriber username.toLowerCase(), (ticket, status) ->
+      activateSubscriber username, (ticket, status) ->
         client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
         postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
     # This is a new subscription.
     # The user hasn't been found in the API, so let's create it.
     else if res.statusCode is 404
-      addSubscriber username.toLowerCase(), (ticket, status) ->
+      addSubscriber username, (ticket, status) ->
         client.logger.info "#{username}'s ticket added successfully." if status is 200
         postSubscriberMessage "#{username} just subscribed! Welcome to the Crusaders!"
       return
