@@ -179,27 +179,6 @@ client.addListener 'hosted', (channel, username, viewers) ->
       client.logger.info "The host by #{username} was recorded: #{body}"
 
 # Subscriptions.
-# activateSubscriber().
-activateSubscriber = (username, callback) ->
-  # Take the name and push it on through.
-  pusher.trigger 'live', 'resubscribed',
-    username: username
-  client.logger.info "#{username} has just re-subscribed!"
-
-  # Update the ticket using the API.
-  json =
-    'is_active': true
-    'updated': new Date(_.now()).toISOString()
-  options =
-    form: json
-    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
-    headers: 'Content-Type': 'application/json'
-  request.put options, (err, res, body) ->
-    # Success message.
-    ticket = JSON.parse(body)
-    statusCode = res.statusCode
-    callback ticket, statusCode
-
 # addSubscriber().
 addSubscriber = (username, callback) ->
   # Take the name and push it on through.
@@ -218,6 +197,27 @@ addSubscriber = (username, callback) ->
     url: 'http://avalonstar.tv/api/tickets/'
     headers: 'Content-Type': 'application/json'
   request.post options, (err, res, body) ->
+    # Success message.
+    ticket = JSON.parse(body)
+    statusCode = res.statusCode
+    callback ticket, statusCode
+
+# reactivateSubscriber().
+reactivateSubscriber = (username, callback) ->
+  # Take the name and push it on through.
+  pusher.trigger 'live', 'resubscribed',
+    username: username
+  client.logger.info "#{username} has just re-subscribed!"
+
+  # Update the ticket using the API.
+  json =
+    'is_active': true
+    'updated': new Date(_.now()).toISOString()
+  options =
+    form: json
+    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
+    headers: 'Content-Type': 'application/json'
+  request.put options, (err, res, body) ->
     # Success message.
     ticket = JSON.parse(body)
     statusCode = res.statusCode
@@ -265,7 +265,7 @@ client.addListener 'subscription', (channel, username) ->
     # This is a re-subscription.
     # The user has been found in the API; they've been a subscriber.
     if res.statusCode is 200
-      activateSubscriber username, (ticket, status) ->
+      reactivateSubscriber username, (ticket, status) ->
         client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
         postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
