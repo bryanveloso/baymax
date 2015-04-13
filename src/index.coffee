@@ -179,72 +179,6 @@ client.addListener 'hosted', (channel, username, viewers) ->
       client.logger.info "The host by #{username} was recorded: #{body}"
 
 # Subscriptions.
-# addSubscriber().
-addSubscriber = (username, callback) ->
-  # Take the name and push it on through.
-  pusher.trigger 'live', 'subscribed',
-    username: username
-  client.logger.info "#{username} has just subscribed!"
-
-  # Create the ticket using the API.
-  json =
-    'name': username
-    'is_active': true
-    'created': new Date(_.now()).toISOString()
-    'updated': new Date(_.now()).toISOString()
-  options =
-    form: json
-    url: 'http://avalonstar.tv/api/tickets/'
-    headers: 'Content-Type': 'application/json'
-  request.post options, (err, res, body) ->
-    # Success message.
-    ticket = JSON.parse(body)
-    statusCode = res.statusCode
-    callback ticket, statusCode
-
-# reactivateSubscriber().
-reactivateSubscriber = (username, callback) ->
-  # Take the name and push it on through.
-  pusher.trigger 'live', 'resubscribed',
-    username: username
-  client.logger.info "#{username} has just re-subscribed!"
-
-  # Update the ticket using the API.
-  json =
-    'is_active': true
-    'updated': new Date(_.now()).toISOString()
-  options =
-    form: json
-    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
-    headers: 'Content-Type': 'application/json'
-  request.put options, (err, res, body) ->
-    # Success message.
-    ticket = JSON.parse(body)
-    statusCode = res.statusCode
-    callback ticket, statusCode
-
-# updateSubstreak()
-updateSubstreak = (username, months, callback) ->
-  pusher.trigger 'live', 'substreaked',
-    username: username
-    length: months
-  client.logger.info "#{username} has been subscribed for #{months} months!"
-
-  # Update the ticket using the API.
-  json =
-    'is_active': true
-    'updated': new Date(_.now()).toISOString()
-    'streak': months
-  options =
-    form: json
-    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
-    headers: 'Content-Type': 'application/json'
-  request.put options, (err, res, body) ->
-    # Success message.
-    ticket = JSON.parse(body)
-    statusCode = res.statusCode
-    callback ticket, statusCode
-
 postSubscriberMessage = (message) ->
   payload =
     # User data.
@@ -265,21 +199,48 @@ client.addListener 'subscription', (channel, username) ->
     # This is a re-subscription.
     # The user has been found in the API; they've been a subscriber.
     if res.statusCode is 200
-      reactivateSubscriber username, (ticket, status) ->
-        client.logger.info "#{username}'s ticket reactivated successfully." if status is 200
+      # Update the ticket using the API.
+      json =
+        'is_active': true
+        'updated': new Date(_.now()).toISOString()
+      options =
+        form: json
+        url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
+        headers: 'Content-Type': 'application/json'
+      request.put options, (err, res, body) ->
+        client.logger.info "#{username}'s ticket reactivated successfully." if res.statusCode is 200
         postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
     # This is a new subscription.
     # The user hasn't been found in the API, so let's create it.
     else if res.statusCode is 404
-      addSubscriber username, (ticket, status) ->
-        client.logger.info "#{username}'s ticket added successfully." if status is 200
+      # Create the ticket using the API.
+      json =
+        'name': username
+        'is_active': true
+        'created': new Date(_.now()).toISOString()
+        'updated': new Date(_.now()).toISOString()
+      options =
+        form: json
+        url: 'http://avalonstar.tv/api/tickets/'
+        headers: 'Content-Type': 'application/json'
+      request.post options, (err, res, body) ->
+        client.logger.info "#{username}'s ticket added successfully." if res.statusCode is 200
         postSubscriberMessage "#{username} just subscribed! Welcome to the Crusaders!"
       return
 
 client.addListener 'subanniversary', (channel, username, months) ->
-  updateSubstreak username.toLowerCase(), months, (ticket, status) ->
-    client.logger.info "#{username}'s substreak added successfully." if status is 200
+  # Update the ticket using the API.
+  json =
+    'is_active': true
+    'updated': new Date(_.now()).toISOString()
+    'streak': months
+  options =
+    form: json
+    url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
+    headers: 'Content-Type': 'application/json'
+  request.put options, (err, res, body) ->
+    client.logger.info "#{username}'s substreak added successfully." if res.statusCode is 200
     postSubscriberMessage "#{username}, thank you for your #{months} months as a Crusader!"
   return
 
