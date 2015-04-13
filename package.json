@@ -9,7 +9,6 @@
     "dotenv": "^1.1.0",
     "firebase": "^2.2.3",
     "lodash": "^3.6.0",
-    "pusher": "^1.0.4",
     "request": "^2.55.0",
     "twitch-irc": "^1.2.5"
   },

@@ -11,13 +11,6 @@ request = require('request')
 Firebase = require('firebase')
 firebase = new Firebase 'https://avalonstar.firebaseio.com/'
 
-# Pusher configuration.
-Pusher = require('pusher')
-pusher = new Pusher
-  appId: process.env.PUSHER_APP_ID
-  key: process.env.PUSHER_KEY
-  secret: process.env.PUSHER_SECRET
-
 # Twitch IRC configuration.
 irc = require('twitch-irc')
 client = new irc.client(
@@ -152,11 +145,6 @@ client.addListener 'join', (channel, username) ->
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
-  # First, push the data to Pusher to power the notification.
-  pusher.trigger 'live', 'hosted',
-    username: username
-  client.logger.info "We've been hosted by #{username}."
-
   # Get the status of the Episode from the API.
   request.get 'http://avalonstar.tv/live/status/', (err, res, body) ->
     episode = JSON.parse(body)
