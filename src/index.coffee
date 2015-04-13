@@ -194,7 +194,7 @@ activateSubscriber = (username, callback) ->
     form: json
     url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
     headers: 'Content-Type': 'application/json'
-  request.patch options, (err, res, body) ->
+  request.put options, (err, res, body) ->
     # Success message.
     ticket = JSON.parse(body)
     statusCode = res.statusCode
@@ -239,7 +239,7 @@ updateSubstreak = (username, months, callback) ->
     form: json
     url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
     headers: 'Content-Type': 'application/json'
-  request.patch options, (err, res, body) ->
+  request.put options, (err, res, body) ->
     # Success message.
     ticket = JSON.parse(body)
     statusCode = res.statusCode
