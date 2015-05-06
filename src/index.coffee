@@ -18,7 +18,6 @@ client = new irc.client(
     debug: true
     debugIgnore: [ 'action', 'chat', 'ping' ]
     logging: true
-    exitOnError: false
   identity:
     username: process.env.TWITCH_IRC_USERNAME
     password: process.env.TWITCH_IRC_PASSWORD
