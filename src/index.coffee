@@ -203,7 +203,7 @@ client.addListener 'subscription', (channel, username) ->
     else if res.statusCode is 404
       # Create the ticket using the API.
       json =
-        'name': username
+        'name': username.toLowerCase()
         'is_active': true
         'created': new Date(_.now()).toISOString()
         'updated': new Date(_.now()).toISOString()
