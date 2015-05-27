@@ -5,12 +5,12 @@
   "main": "src/index.js",
   "private": true,
   "dependencies": {
-    "coffee-script": "^1.9.1",
+    "coffee-script": "^1.9.2",
     "dotenv": "^1.1.0",
-    "firebase": "^2.2.4",
-    "lodash": "^3.6.0",
+    "firebase": "^2.2.5",
+    "lodash": "^3.9.3",
     "request": "^2.55.0",
-    "twitch-irc": "^1.2.6"
+    "twitch-irc": "^1.2.7"
   },
   "devDependencies": {},
   "repository": {
