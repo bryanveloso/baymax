@@ -87,20 +87,6 @@ emoticonize = (tokens, emoticons) ->
     return tokenizedMessage
   return tokens
 
-# handleChatter().
-handleChatter = (username) ->
-  viewers = firebase.child('viewers')
-  viewers.child(username).once 'value', (snapshot) ->
-    unless snapshot.val()?
-      options =
-        url: "https://api.twitch.tv/kraken/users/#{username}"
-        headers: 'Content-Type': 'application/json'
-      request.get options, (err, res, body) ->
-        body = JSON.parse(body)
-        json = {'display_name': body.display_name or username, 'username': username}
-        viewers.child(username).set json, (error) ->
-          client.logger.info "#{username} has been added to Firebase."
-
 # handleMessage().
 handleMessage = (channel, user, message, is_action) ->
   # Tokenize and emoticonize the message first.
@@ -108,27 +94,25 @@ handleMessage = (channel, user, message, is_action) ->
 
   # The meat of the entire operation. Pushes a payload containing a message,
   # emotes, roles, and usernames to Firebase.
-  firebase.child('viewers').child(user.username).once 'value', (snapshot) ->
-    data = snapshot.val() or []
-    payload =
-      # User data.
-      'username': user.username
-      'display_name': user.display_name or user.username
-      'color': user.color or '#ffffff'
-      'roles': _.uniq(user.special)
+  payload =
+    # User data.
+    'username': user.username
+    'display_name': user['display-name'] or user.username
+    'color': user.color or '#ffffff'
+    'roles': _.uniq(user.special)
 
-      # Message data.
-      'message': tokenizedMessage.join('')
-      'timestamp': _.now()
-      'is_action': is_action
+    # Message data.
+    'message': tokenizedMessage.join('')
+    'timestamp': _.now()
+    'is_action': is_action
 
-      # Payload version.
-      # This is mainly so we can pick out which messages are which in Firebase.
-      'version': '2'
+    # Payload version.
+    # This is mainly so we can pick out which messages are which in Firebase.
+    'version': '3'
 
-    # Send the message to firebase!
-    messages = firebase.child('messages').push()
-    messages.setWithPriority payload, _.now()
+  # Send the message to firebase!
+  messages = firebase.child('messages').push()
+  messages.setWithPriority payload, _.now()
 
 # Listeners. Events sent to 'action' or 'chat' are sent to handleMessage().
 # They're both essentially the same except for the fact that we mark one
@@ -138,9 +122,6 @@ client.addListener 'action', (channel, user, message) ->
 
 client.addListener 'chat', (channel, user, message) ->
   handleMessage channel, user, message, false
-
-client.addListener 'join', (channel, username) ->
-  handleChatter username
 
 # Events.
 client.addListener 'hosted', (channel, username, viewers) ->
