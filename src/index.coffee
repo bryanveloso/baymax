@@ -113,7 +113,7 @@ handleMessage = (channel, user, message, is_action) ->
     payload =
       # User data.
       'username': user.username
-      'display_name': data?.display_name or user.username
+      'display_name': user.display_name or user.username
       'color': user.color or '#ffffff'
       'roles': _.uniq(user.special)
 
