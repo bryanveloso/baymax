@@ -235,6 +235,6 @@ server = http.createServer((request, response) ->
 ).listen(process.env.PORT || 8888);
 
 # Ping it.
-cronJob = client.utils.cronjobs('0 */5 * * * *', ->
+cronJob = client.utils.cronjobs('0 0 */5 * * *', ->
   request.get 'https://baymax.herokuapp.com/'
 ).start()
