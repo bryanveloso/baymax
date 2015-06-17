@@ -7,9 +7,9 @@
   "dependencies": {
     "coffee-script": "^1.9.3",
     "dotenv": "^1.1.0",
-    "firebase": "^2.2.6",
+    "firebase": "^2.2.7",
     "lodash": "^3.9.3",
-    "request": "^2.57.0",
+    "request": "^2.58.0",
     "twitch-irc": "git://github.com/twitch-irc/twitch-irc.git#master"
   },
   "devDependencies": {},
