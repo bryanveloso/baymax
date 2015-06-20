@@ -97,7 +97,7 @@ handleMessage = (channel, user, message, is_action) ->
   payload =
     # User data.
     'username': user.username
-    'display_name': user['display-name'] or user.username
+    'display_name': if user['display-name']? then user['display-name'] else user.username
     'color': user.color or '#ffffff'
     'roles': _.uniq(user.special)
 
