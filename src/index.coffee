@@ -232,7 +232,7 @@ http = require('http')
 server = http.createServer((request, response) ->
   response.writeHead 200, 'Content-Type': 'application/json'
   response.end '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
-).listen(process.env.PORT || 8888);
+).listen(process.env.PORT || 8888)
 
 # Ping it.
 cronJob = client.utils.cronjobs('0 0 */5 * * *', ->
