@@ -225,16 +225,8 @@ client.addListener 'timeout', (channel, username) ->
       message.ref().child('is_purged').set(true)
 
 # Miscellaneous.
-# The bot will also launch a webserver that we can ping to keep the application
-# alive. Either way this'll be necessary since Heroku requires attachment to a
-# port in order to keep the dynos alive.
 http = require('http')
 server = http.createServer((request, response) ->
   response.writeHead 200, 'Content-Type': 'application/json'
   response.end '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
 ).listen(process.env.PORT || 8888)
-
-# Ping it.
-cronJob = client.utils.cronjobs('0 0 */5 * * *', ->
-  request.get 'https://baymax.herokuapp.com/'
-).start()
