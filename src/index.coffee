@@ -230,3 +230,15 @@ server = http.createServer((request, response) ->
   response.writeHead 200, 'Content-Type': 'application/json'
   response.end '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
 ).listen(process.env.PORT || 8888)
+
+# Auto-load commands and events.
+if fs.existsSync('./commands')
+  fs.readdirSync('./commands/').forEach (file) ->
+    if !/(^|.\/)\.+[^\/\.]/g.test(file)
+      require('./commands/' + file) client
+    return
+if fs.existsSync('./events')
+  fs.readdirSync('./events/').forEach (file) ->
+    if !/(^|.\/)\.+[^\/\.]/g.test(file)
+      require('./events/' + file) client
+    return
