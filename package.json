@@ -10,6 +10,7 @@
     "firebase": "^2.2.7",
     "lodash": "^3.9.3",
     "request": "^2.58.0",
+    "tmi.js": "0.0.3",
     "twitch-irc": "git://github.com/twitch-irc/twitch-irc.git#master"
   },
   "devDependencies": {},
