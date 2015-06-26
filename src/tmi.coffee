@@ -8,7 +8,6 @@ options =
   options:
     debug: true
   connection:
-    random: 'chat'
     server: '192.16.64.145'
   identity:
     username: process.env.TWITCH_IRC_USERNAME
