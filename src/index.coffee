@@ -232,6 +232,7 @@ server = http.createServer((request, response) ->
 ).listen(process.env.PORT || 8888)
 
 # Auto-load commands and events.
+fs = require('fs')
 if fs.existsSync('./commands')
   fs.readdirSync('./commands/').forEach (file) ->
     if !/(^|.\/)\.+[^\/\.]/g.test(file)
