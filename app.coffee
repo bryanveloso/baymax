@@ -17,8 +17,12 @@ options =
 client = new tmi.client(options)
 client.connect()
 
+# Load scripts.
 fs = require('fs')
-console.log fs.existsSync('scripts/')
+path = './scripts/'
+if fs.existsSync(path)
+  for file in fs.readdirSync(path).sort()
+    require(path + file) client
 
 # Listeners.
 # client.on 'action', (channel, user, message, self) ->
