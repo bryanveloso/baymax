@@ -16,3 +16,12 @@ options =
 
 client = new tmi.client(options)
 client.connect()
+
+fs = require('fs')
+console.log fs.existsSync('scripts/')
+
+# Listeners.
+# client.on 'action', (channel, user, message, self) ->
+# client.on 'chat', (channel, user, message, self) ->
+
+# TODO: Add raid recording functionality.
