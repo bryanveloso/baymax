@@ -24,8 +24,4 @@ if fs.existsSync(path)
   for file in fs.readdirSync(path).sort()
     require(path + file) client
 
-# Listeners.
-# client.on 'action', (channel, user, message, self) ->
-# client.on 'chat', (channel, user, message, self) ->
-
 # TODO: Add raid recording functionality.
