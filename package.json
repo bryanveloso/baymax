@@ -2,7 +2,7 @@
   "name": "baymax",
   "version": "0.3.0",
   "description": "Your personal Twitch companion.",
-  "main": "src/index.js",
+  "main": "app.coffee",
   "private": true,
   "dependencies": {
     "coffee-script": "^1.9.3",
