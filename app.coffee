@@ -1,6 +1,9 @@
 # Environment loading.
-dotenv = require('dotenv')
-dotenv.load()
+# This is a bit hacky. We're assuming that we're running locally since
+# `process.env.PORT` should only exist when running on Heroku.
+if not process.env.PORT
+  dotenv = require('dotenv')
+  dotenv.load()
 
 # TMI.js configuration.
 tmi = require('tmi.js')
