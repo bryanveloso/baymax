@@ -15,7 +15,6 @@ options =
   channels: [ process.env.TWITCH_IRC_ROOMS ]
 
 client = new tmi.client(options)
-client.connect()
 
 # Load scripts.
 fs = require('fs')
@@ -24,4 +23,4 @@ if fs.existsSync(path)
   for file in fs.readdirSync(path).sort()
     require(path + file) client
 
-# TODO: Add raid recording functionality.
+client.connect()
