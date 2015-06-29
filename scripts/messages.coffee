@@ -1,4 +1,4 @@
-# Messaging Functionality.
+# Messaging listeners.
 module.exports = (client) ->
   console.log 'heeeyyyyyyy...'
 

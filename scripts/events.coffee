@@ -1,7 +1,7 @@
 _ = require('lodash')
 request = require('request')
 
-# Listeners.
+# Event listeners.
 module.exports = (client) ->
   # Hosting functionality.
   client.on 'hosted', (channel, username) ->
