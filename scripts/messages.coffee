@@ -75,9 +75,9 @@ module.exports = (client) ->
     payload =
       # User data.
       'username': user.username
-      'display_name': if user['display-name'] then user['display-name'] else user.username
+      'display_name': user['display-name'] or user.username
       'color': user.color or '#ffffff'
-      'role': user['user-type']
+      'role': user['user-type'] or ''
       'subscriber': user.subscriber
       'turbo': user.turbo
 
