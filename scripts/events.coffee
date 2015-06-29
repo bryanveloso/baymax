@@ -42,7 +42,6 @@ module.exports = (client) ->
             'game': streamer.game
             'username': streamer.name
             'timestamp': new Date(_.now()).toISOString()
-          console.log json
           options =
             form: json
             url: 'http://avalonstar.tv/api/raids/'
