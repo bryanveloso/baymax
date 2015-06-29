@@ -86,7 +86,6 @@ module.exports = (client) ->
       'timestamp': _.now()
       'is_action': is_action
 
-    console.log payload
     # Send the message to firebase!
     # messages = firebase.child('messages').push()
     # messages.setWithPriority payload, _.now()
