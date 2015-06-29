@@ -68,7 +68,7 @@ module.exports = (client) ->
   # handleMessage().
   handleMessage = (channel, user, message, is_action) ->
     # Tokenize and emoticonize the message first.
-    tokenizedMessage = emoticonize([message], user.emote)
+    tokenizedMessage = emoticonize([message], user.emotes)
 
     # # The meat of the entire operation. Pushes a payload containing a message,
     # # emotes, roles, and usernames to Firebase.
