@@ -70,25 +70,24 @@ module.exports = (client) ->
     # Tokenize and emoticonize the message first.
     tokenizedMessage = emoticonize([message], user.emotes)
 
-    # # The meat of the entire operation. Pushes a payload containing a message,
-    # # emotes, roles, and usernames to Firebase.
-    # payload =
-    #   # User data.
-    #   'username': user.username
-    #   'display_name': user['display-name']
-    #   'color': user.color or '#ffffff'
-    #   'roles': _.uniq(user.special)
-    #
-    #   # Message data.
-    #   'message': tokenizedMessage.join('')
-    #   'timestamp': _.now()
-    #   'is_action': is_action
-    #
-    #   # Payload version.
-    #   # This is mainly so we can pick out which messages are which in Firebase.
-    #   'version': '3'
-    #
-    # # Send the message to firebase!
+    # The meat of the entire operation. Pushes a payload containing a message,
+    # emotes, roles, and usernames to Firebase.
+    payload =
+      # User data.
+      'username': user.username
+      'display_name': user['display-name']
+      'color': user.color or '#ffffff'
+      'role': user['user-type']
+      'subscriber': user.subscriber
+      'turbo': user.turbo
+
+      # Message data.
+      'message': tokenizedMessage.join('')
+      'timestamp': _.now()
+      'is_action': is_action
+
+    console.log payload
+    # Send the message to firebase!
     # messages = firebase.child('messages').push()
     # messages.setWithPriority payload, _.now()
 
