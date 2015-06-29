@@ -24,6 +24,9 @@ module.exports = (client) ->
         client.log.info "The host by #{username} was recorded: #{body}"
 
   # Raid functionality.
+  # Handles the backend functions of a raid: looking up the raider via Twitch's
+  # API, and recording it. This differs from the rest of the events since it's
+  # triggered by a chat command.
   client.on 'chat', (channel, user, message) ->
     if message.indexOf('!raider') == 0
       params = message.split(' ')
@@ -31,6 +34,7 @@ module.exports = (client) ->
         streamer = JSON.parse(body)
 
         if streamer.status == 404
+          client.log.error "#{params[1]} doesn't exist."
           return
 
         # Grab the status from the API.
