@@ -24,3 +24,11 @@ if fs.existsSync(path)
     require(path + file) client
 
 client.connect()
+
+# Miscellaneous.
+# Bind to a port so the application is kept alive.
+http = require('http')
+server = http.createServer((request, response) ->
+  response.writeHead 200, 'Content-Type': 'application/json'
+  response.end '{"greeting": "Hello, I am Baymax, your personal Twitch companion."}'
+).listen(process.env.PORT || 8888)
