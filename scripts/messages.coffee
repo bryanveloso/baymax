@@ -87,8 +87,8 @@ module.exports = (client) ->
       'is_action': is_action
 
     # Send the message to firebase!
-    # messages = firebase.child('messages').push()
-    # messages.setWithPriority payload, _.now()
+    messages = firebase.child('messages').push()
+    messages.setWithPriority payload, _.now()
 
   # Listeners.
   client.on 'action', (channel, user, message, self) ->
