@@ -1,6 +1,6 @@
 {
   "name": "baymax",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Your personal Twitch companion.",
   "main": "src/index.js",
   "private": true,
@@ -10,7 +10,7 @@
     "firebase": "^2.2.7",
     "lodash": "^3.9.3",
     "request": "^2.58.0",
-    "tmi.js": "0.0.3",
+    "tmi.js": "0.0.3"
   },
   "devDependencies": {},
   "repository": {
