@@ -1,3 +1,4 @@
+_ = require('lodash')
 request = require('request')
 
 # Firebase.
