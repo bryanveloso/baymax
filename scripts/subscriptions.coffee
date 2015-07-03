@@ -15,6 +15,7 @@ module.exports = (client) ->
       'message': message
       'timestamp': _.now()
       'is_action': false
+      'subscriber': false
 
     # Send the message to firebase!
     messages = firebase.child('messages').push()
