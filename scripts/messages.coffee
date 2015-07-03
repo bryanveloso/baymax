@@ -78,8 +78,8 @@ module.exports = (client) ->
       'display_name': user['display-name'] or user.username
       'color': user.color or '#ffffff'
       'role': user['user-type'] or ''
-      'subscriber': user.subscriber
-      'turbo': user.turbo
+      'subscriber': user.subscriber or false
+      'turbo': user.turbo or false
 
       # Message data.
       'message': tokenizedMessage.join('')
