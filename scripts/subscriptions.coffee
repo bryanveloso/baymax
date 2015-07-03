@@ -62,7 +62,7 @@ module.exports = (client) ->
     json =
       'is_active': true
       'updated': new Date(_.now()).toISOString()
-      'streak': months
+      'streak': length
     options =
       form: json
       url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
