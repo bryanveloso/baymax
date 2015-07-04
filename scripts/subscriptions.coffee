@@ -69,5 +69,5 @@ module.exports = (client) ->
       headers: 'Content-Type': 'application/json'
     request.put options, (err, res, body) ->
       client.logger.info "#{username}'s substreak added successfully." if res.statusCode is 200
-      postSubscriberMessage "#{username}, thank you for your #{months} months as a Crusader!"
+      postSubscriberMessage "#{username}, thank you for your #{length} months as a Crusader!"
     return
