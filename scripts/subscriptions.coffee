@@ -36,7 +36,7 @@ module.exports = (client) ->
         url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
         headers: 'Content-Type': 'application/json'
       request.put options, (err, res, body) ->
-        client.logger.info "#{username}'s ticket reactivated successfully." if res.statusCode is 200
+        client.log.info "#{username}'s ticket reactivated successfully." if res.statusCode is 200
         postSubscriberMessage "Welcome #{username} back to the Crusaders!"
       return
     # This is a new subscription.
@@ -53,7 +53,7 @@ module.exports = (client) ->
         url: 'http://avalonstar.tv/api/tickets/'
         headers: 'Content-Type': 'application/json'
       request.post options, (err, res, body) ->
-        client.logger.info "#{username}'s ticket added successfully." if res.statusCode is 200
+        client.log.info "#{username}'s ticket added successfully." if res.statusCode is 200
         postSubscriberMessage "#{username} just subscribed! Welcome to the Crusaders!"
       return
 
@@ -68,6 +68,6 @@ module.exports = (client) ->
       url: "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/"
       headers: 'Content-Type': 'application/json'
     request.put options, (err, res, body) ->
-      client.logger.info "#{username}'s substreak added successfully." if res.statusCode is 200
+      client.log.info "#{username}'s substreak added successfully." if res.statusCode is 200
       postSubscriberMessage "#{username}, thank you for your #{length} months as a Crusader!"
     return
