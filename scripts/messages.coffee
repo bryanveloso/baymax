@@ -88,7 +88,7 @@ module.exports = (client) ->
 
     # "broadcaster" is no longer a valid user type.
     # Let's detect this ourselves.
-    if channel is user
+    if user.username == channel.replace(/^#/, '')
       payload['role'] = 'broadcaster'
 
     # Send the message to firebase!
