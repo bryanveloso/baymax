@@ -95,7 +95,7 @@ module.exports = (client) ->
     handleMessage channel, user, message, true
 
   client.on 'chat', (channel, user, message, self) ->
-    handleMessage channel, user, message, false
+    handleMessage(channel, user, message, false) if user isnt 'twitchnotify'
 
   # Cleared chat.
   client.on 'timeout', (channel, username) ->
