@@ -52,6 +52,6 @@ module.exports = (client) ->
             headers: 'Content-Type': 'application/json'
           request.post options, (err, res, body) ->
             if err
-              client.log.error "The raid by #{username} couldn't be recorded: #{err}, #{body}"
+              client.log.error "The raid by #{params[1]} couldn't be recorded: #{err}, #{body}"
               return
-            client.log.info "The raid by #{username} was recorded: #{body}"
+            client.log.info "The raid by #{params[1]} was recorded: #{body}"
