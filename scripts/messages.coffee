@@ -86,6 +86,11 @@ module.exports = (client) ->
       'timestamp': _.now()
       'is_action': is_action
 
+    # "broadcaster" is no longer a valid user type.
+    # Let's detect this ourselves.
+    if channel is user
+      payload['role'] = 'broadcaster'
+
     # Send the message to firebase!
     messages = firebase.child('messages').push()
     messages.setWithPriority payload, _.now()
