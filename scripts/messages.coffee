@@ -106,5 +106,5 @@ module.exports = (client) ->
     message = firebase.child('messages')
     message.orderByChild('username').equalTo(username).limitToLast(10).once 'value', (data) ->
       data.forEach (message) ->
-        client.logger.info "\"#{message.child('message').val()}\" by #{username} has been purged."
+        client.log.info "\"#{message.child('message').val()}\" by #{username} has been purged."
         message.ref().child('is_purged').set(true)
