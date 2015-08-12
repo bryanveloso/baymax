@@ -10,8 +10,6 @@ tmi = require('tmi.js')
 options =
   options:
     debug: true
-  connection:
-    server: '192.16.64.145'
   identity:
     username: process.env.TWITCH_IRC_USERNAME
     password: process.env.TWITCH_IRC_PASSWORD
