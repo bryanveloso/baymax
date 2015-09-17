@@ -5,11 +5,11 @@
   "main": "app.coffee",
   "private": true,
   "dependencies": {
-    "coffee-script": "^1.9.3",
+    "coffee-script": "^1.10.0",
     "dotenv": "^1.2.0",
-    "firebase": "^2.2.9",
+    "firebase": "^2.3.1",
     "lodash": "^3.10.1",
-    "request": "^2.60.0",
+    "request": "^2.64.0",
     "tmi.js": "0.0.23"
   },
   "devDependencies": {},
