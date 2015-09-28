@@ -10,7 +10,7 @@
     "firebase": "^2.3.1",
     "lodash": "^3.10.1",
     "request": "^2.64.0",
-    "tmi.js": "0.0.23"
+    "tmi.js": "0.0.24"
   },
   "devDependencies": {},
   "repository": {
