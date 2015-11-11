@@ -1,4 +1,9 @@
 _ = require('lodash')
+
+# Firebase.
+Firebase = require('firebase')
+firebase = new Firebase 'https://avalonstar.firebaseio.com/'
+
 deepEqual = require('deep-equal')
 
 # Globals.
@@ -6,6 +11,14 @@ hasRun = false
 
 # The "Firehose"
 module.exports = (client) ->
+  # `discharge()` sends our payload to Firebase, setting the payload's
+  # "priority" to the current timestamp.
+  discharge = (payload) ->
+    firehose = firebase.child('firehose').push()
+    firehose.setWithPriority payload, _.now()
+
+  # Due to a lack of push functionality in Twitch's API, we use `poll()` to
+  # monitor the API's 'follows' endpoint.
   poll = ->
     client.api {
       url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows'
