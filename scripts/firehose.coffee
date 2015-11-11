@@ -42,6 +42,7 @@ module.exports = (client) ->
   # TODO: There's a difference between subs and resubs. Address that.
   client.on 'subscription', (channel, username) ->
     payload =
+      'event': 'subscription'
       'channel': channel
       'username': username
     discharge payload
@@ -49,6 +50,7 @@ module.exports = (client) ->
   # Firehose: Substreaked
   client.on 'subanniversary', (channel, username, length) ->
     payload =
+      'event': 'substreak'
       'channel': channel
       'username': username
       'length': length
@@ -57,6 +59,7 @@ module.exports = (client) ->
   # Firehose: Hosted
   client.on 'hosted', (channel, username, viewers) ->
     payload =
+      'event': 'hosted'
       'channel': channel
       'username': username
     discharge payload
