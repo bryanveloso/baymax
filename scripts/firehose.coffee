@@ -38,7 +38,7 @@ module.exports = (client) ->
 
   setInterval(poll, 10000)
 
-  # Firehose: Subscriptions
+  # Firehose: Subscribed
   # TODO: There's a difference between subs and resubs. Address that.
   client.on 'subscription', (channel, username) ->
     payload =
@@ -46,10 +46,17 @@ module.exports = (client) ->
       'username': username
     discharge payload
 
-  # Firehose: Substreaks
+  # Firehose: Substreaked
   client.on 'subanniversary', (channel, username, length) ->
     payload =
       'channel': channel
       'username': username
       'length': length
+    discharge payload
+
+  # Firehose: Hosted
+  client.on 'hosted', (channel, username, viewers) ->
+    payload =
+      'channel': channel
+      'username': username
     discharge payload
