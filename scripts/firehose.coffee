@@ -17,6 +17,7 @@ module.exports = (client) ->
     firehose = firebase.child('firehose').push()
     firehose.setWithPriority payload, _.now()
 
+  # Firehose: Follows
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
   # monitor the API's 'follows' endpoint.
   poll = ->
@@ -36,3 +37,19 @@ module.exports = (client) ->
       return
 
   setInterval(poll, 10000)
+
+  # Firehose: Subscriptions
+  # TODO: There's a difference between subs and resubs. Address that.
+  client.on 'subscription', (channel, username) ->
+    payload =
+      'channel': channel
+      'username': username
+    discharge payload
+
+  # Firehose: Substreaks
+  client.on 'subanniversary', (channel, username, length) ->
+    payload =
+      'channel': channel
+      'username': username
+      'length': length
+    discharge payload
