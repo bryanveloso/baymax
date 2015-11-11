@@ -63,3 +63,14 @@ module.exports = (client) ->
       'channel': channel
       'username': username
     discharge payload
+
+  # Firehose: Tipped
+  es = new EventSource("https://imraising.tv/api/v1/listen?apikey=#{process.env.IMR_API_KEY}")
+  es.addEventListener 'donation.add', (e) ->
+    body = JSON.parse(e.data)
+    payload =
+      'event': 'donation'
+      'username': body.nickname
+      'message': body.message
+      'amount': body.amount.display.total
+    discharge payload
