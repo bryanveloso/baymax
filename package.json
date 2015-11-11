@@ -4,6 +4,9 @@
   "description": "Your personal Twitch companion.",
   "main": "app.coffee",
   "private": true,
+  "engines": {
+    "node": "5.0.0"
+  },
   "dependencies": {
     "coffee-script": "^1.10.0",
     "dotenv": "^1.2.0",
