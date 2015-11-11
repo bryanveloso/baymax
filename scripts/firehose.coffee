@@ -2,7 +2,7 @@ _ = require('lodash')
 
 # Firebase.
 Firebase = require('firebase')
-firebase = new Firebase 'https://avalonstar.firebaseio.com/'
+firebase = new Firebase process.env.FIREBASE_URL
 
 deepEqual = require('deep-equal')
 
