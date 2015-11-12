@@ -33,7 +33,7 @@ module.exports = (client) ->
         client.log.error err
         return
 
-      console.log body.follows
+      # ...
       return
 
   setInterval(poll, 10000)
