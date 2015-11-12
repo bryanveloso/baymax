@@ -44,8 +44,16 @@ module.exports = (client) ->
       body.follows.some (follower) ->
         if deepEqual(follower, cache[0])
           return true
-        newFollowers.push follower.user.display_name
+
+        # ...
+        username = follower.user.display_name
+        newFollowers.push username
+        payload =
+          'event': 'follow'
+          'username': username
+        discharge payload
         false
+
       if !newFollowers.length
         return
       client.log.info "New follower(s)!"
