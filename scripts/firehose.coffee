@@ -34,7 +34,26 @@ module.exports = (client) ->
         return
 
       # ...
+      if !hasRun
+        hasRun = true
+        cache = body.follows
+        return
+
+      # ...
+      newFollowers = []
+      body.follows.some (follower) ->
+        if deepEqual(follower, cache[0])
+          return true
+        newFollowers.push follower.user.display_name
+        false
+      if !newFollowers.length
+        return
+      client.log.info "New follower(s)!"
+
+      cache = body.follows
       return
+    # ...
+    return
 
   setInterval(poll, 10000)
 
