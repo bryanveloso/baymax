@@ -8,6 +8,7 @@ deepEqual = require('deep-equal')
 EventSource = require('eventsource')
 
 # Globals.
+cache = []
 hasRun = false
 
 # The "Firehose"
