@@ -5,6 +5,7 @@ Firebase = require('firebase')
 firebase = new Firebase process.env.FIREBASE_URL
 
 deepEqual = require('deep-equal')
+EventSource = require('eventsource')
 
 # Globals.
 hasRun = false
