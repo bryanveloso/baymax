@@ -72,7 +72,6 @@ module.exports = (client) ->
   client.on 'subscription', (channel, username) ->
     payload =
       'event': 'subscription'
-      'channel': channel
       'username': username
     discharge payload
 
@@ -80,7 +79,6 @@ module.exports = (client) ->
   client.on 'subanniversary', (channel, username, length) ->
     payload =
       'event': 'substreak'
-      'channel': channel
       'username': username
       'length': length
     discharge payload
@@ -89,7 +87,6 @@ module.exports = (client) ->
   client.on 'hosted', (channel, username, viewers) ->
     payload =
       'event': 'hosted'
-      'channel': channel
       'username': username
     discharge payload
 
