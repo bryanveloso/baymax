@@ -11,6 +11,7 @@
     "coffee-script": "^1.10.0",
     "deep-equal": "1.0.1",
     "dotenv": "^1.2.0",
+    "eventsource": "0.1.6",
     "firebase": "^2.3.1",
     "lodash": "^3.10.1",
     "request": "^2.64.0",
