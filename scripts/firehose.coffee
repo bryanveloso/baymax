@@ -14,9 +14,10 @@ hasRun = false
 # The "Firehose"
 module.exports = (client) ->
   # `discharge()` sends our payload to Firebase, setting the payload's
-  # "priority" to the current timestamp.
+  # "priority" to the current timestamp. We do not set the name of the Firebase
+  # endpoint to 'firehose' because Ember (and Emberfire) pluralize the key.
   discharge = (payload) ->
-    firehose = firebase.child('firehose').push()
+    firehose = firebase.child('events').push()
     firehose.setWithPriority payload, _.now()
 
   # Firehose: Follows
