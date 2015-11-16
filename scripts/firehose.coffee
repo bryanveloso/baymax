@@ -87,7 +87,7 @@ module.exports = (client) ->
   # Firehose: Hosted
   client.on 'hosted', (channel, username, viewers) ->
     payload =
-      'event': 'hosted'
+      'event': 'host'
       'username': username
     discharge payload
 
@@ -96,7 +96,7 @@ module.exports = (client) ->
   es.addEventListener 'donation.add', (e) ->
     body = JSON.parse(e.data)
     payload =
-      'event': 'donation'
+      'event': 'tip'
       'username': body.nickname
       'message': body.message
       'amount': body.amount.display.total
