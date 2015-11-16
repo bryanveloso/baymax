@@ -17,6 +17,7 @@ module.exports = (client) ->
   # "priority" to the current timestamp. We do not set the name of the Firebase
   # endpoint to 'firehose' because Ember (and Emberfire) pluralize the key.
   discharge = (payload) ->
+    payload['timestamp'] = _.now()
     firehose = firebase.child('events').push()
     firehose.setWithPriority payload, _.now()
 
