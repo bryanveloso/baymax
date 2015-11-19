@@ -19,7 +19,7 @@ module.exports = (client) ->
   discharge = (payload) ->
     payload['timestamp'] = _.now()
     firehose = firebase.child('events').push()
-    firehose.setWithPriority payload, (0 - _.now())
+    firehose.setWithPriority payload, _.now()
 
   # Firehose: Follows
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
