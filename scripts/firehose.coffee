@@ -18,7 +18,7 @@ module.exports = (client) ->
   # endpoint to 'firehose' because Ember (and Emberfire) pluralize the key.
   discharge = (payload) ->
     firehose = firebase.child('events').push()
-    firehose.setWithPriority payload, payload.timestamp
+    firehose.setWithPriority payload, parseInt(payload.timestamp)
 
   # Firehose: Follows
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
