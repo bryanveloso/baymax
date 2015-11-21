@@ -96,6 +96,22 @@ module.exports = (client) ->
       'username': username
     discharge payload
 
+  # Firehose: Raided
+  client.on 'chat', (channel, user, message) ->
+    if message.indexOf('!raider') == 0
+      params = message.split(' ')
+      request.get "https://api.twitch.tv/kraken/channels/#{params[1]}", (err, res, body) ->
+        streamer = JSON.parse(body)
+
+        if streamer.status == 404
+          return
+
+        payload =
+          'event': 'raid'
+          'timestamp': _.now()
+          'username': streamer.name
+        discharge payload
+
   # Firehose: Tipped
   es = new EventSource("https://imraising.tv/api/v1/listen?apikey=#{process.env.IMR_API_KEY}")
   es.addEventListener 'donation.add', (e) ->
