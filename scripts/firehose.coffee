@@ -55,7 +55,8 @@ module.exports = (client) ->
           'event': 'follow'
           'timestamp': Date.parse(follower.created_at)
           'username': username
-        discharge payload
+        # discharge payload
+        console.log payload
         false
 
       if !newFollowers.length
