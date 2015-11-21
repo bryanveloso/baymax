@@ -17,9 +17,8 @@ module.exports = (client) ->
   # "priority" to the current timestamp. We do not set the name of the Firebase
   # endpoint to 'firehose' because Ember (and Emberfire) pluralize the key.
   discharge = (payload) ->
-    payload['timestamp'] = _.now()
     firehose = firebase.child('events').push()
-    firehose.setWithPriority payload, _.now()
+    firehose.setWithPriority payload, payload.timestamp
 
   # Firehose: Follows
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
@@ -54,6 +53,7 @@ module.exports = (client) ->
         newFollowers.push username
         payload =
           'event': 'follow'
+          'timestamp': Date.parse(follower.created_at)
           'username': username
         discharge payload
         false
@@ -74,6 +74,7 @@ module.exports = (client) ->
   client.on 'subscription', (channel, username) ->
     payload =
       'event': 'subscription'
+      'timestamp': _.now()
       'username': username
     discharge payload
 
@@ -81,6 +82,7 @@ module.exports = (client) ->
   client.on 'subanniversary', (channel, username, length) ->
     payload =
       'event': 'substreak'
+      'timestamp': _.now()
       'username': username
       'length': length
     discharge payload
@@ -98,6 +100,7 @@ module.exports = (client) ->
     body = JSON.parse(e.data)
     payload =
       'event': 'tip'
+      'timestamp': _.now()
       'username': body.nickname
       'message': body.message
       'amount': body.amount.display.total
