@@ -69,7 +69,7 @@ module.exports = (client) ->
     # ...
     return
 
-  setInterval(poll, 10000)
+  setInterval(poll, 1000 * 60 * 1)  # 1 minute.
 
   # Firehose: Subscribed
   # TODO: There's a difference between subs and resubs. Address that.
