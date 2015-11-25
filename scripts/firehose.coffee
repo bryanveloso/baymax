@@ -37,32 +37,32 @@ module.exports = (client) ->
         client.log.error err
         return
 
-      # ...
+      # If this is the first time the script is running (say, after a restart),
+      # set the cache to the initial API response.
       if !hasRun
         hasRun = true
         cache = body.follows
         return
 
-      # ...
       newFollowers = []
       body.follows.some (follower) ->
         if deepEqual(follower, cache[0])
           return true
-
-        # ...
-        username = follower.user.display_name
-        newFollowers.push username
-        payload =
-          'event': 'follow'
-          'timestamp': Date.parse(follower.created_at)
-          'username': username
-        # discharge payload
-        console.log payload
-        false
+        newFollowers.push follower
+        return false
 
       if !newFollowers.length
         return
+
+      # We have new followers! Let's push them along.
       client.log.info "New follower(s)!"
+      newFollowers.forEach (follower) ->
+        payload =
+          'event': 'follow'
+          'timestamp': Date.parse(follower.created_at)
+          'username': follower.user.display_name
+        # discharge payload
+        console.log payload
 
       cache = body.follows
       return
