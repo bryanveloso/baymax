@@ -19,25 +19,26 @@ module.exports = (client) ->
   # Firehose: Follows
   # Prefill.
   cache = []
-  client.api {
-    url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows?limit=100'
-    method: 'GET'
-    headers:
-      'Accept': 'application/vnd.twitchtv.v3+json'
-  }, (err, res, body) ->
-    body = JSON.parse(body)
+  client.on 'logon', ->
+    client.api {
+      url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows?limit=100'
+      method: 'GET'
+      headers:
+        'Accept': 'application/vnd.twitchtv.v3+json'
+    }, (err, res, body) ->
+      body = JSON.parse(body)
 
-    # Return if the Twitch API eats shit.
-    if err
-      client.log.error err
-      return
+      # Return if the Twitch API eats shit.
+      if err
+        client.log.error err
+        return
 
-    body.follows.forEach (follower) ->
-      snapshot =
-        'timestamp': follower.created_at
-        'username': follower.user.display_name
-      cache.push snapshot
-    client.log.info "#{body.follows.length} preloaded into the follow cache."
+      body.follows.forEach (follower) ->
+        snapshot =
+          'timestamp': follower.created_at
+          'username': follower.user.display_name
+        cache.push snapshot
+      client.log.info "#{body.follows.length} preloaded into the follow cache."
 
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
   # monitor the API's 'follows' endpoint.
