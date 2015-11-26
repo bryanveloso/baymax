@@ -6,10 +6,6 @@ request = require('request')
 Firebase = require('firebase')
 firebase = new Firebase process.env.FIREBASE_URL
 
-# Globals.
-cache = []
-hasRun = false
-
 # The "Firehose"
 module.exports = (client) ->
   # `discharge()` sends our payload to Firebase, setting the payload's
@@ -18,8 +14,31 @@ module.exports = (client) ->
   discharge = (payload) ->
     firehose = firebase.child('events').push()
     firehose.setWithPriority payload, payload.timestamp
+    client.log.info "#{_.capitalize(payload.event)} event for #{payload.username} posted successfully."
 
   # Firehose: Follows
+  # Prefill.
+  cache = []
+  client.api {
+    url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows?limit=100'
+    method: 'GET'
+    headers:
+      'Accept': 'application/vnd.twitchtv.v3+json'
+  }, (err, res, body) ->
+    body = JSON.parse(body)
+
+    # Return if the Twitch API eats shit.
+    if err
+      client.log.error err
+      return
+
+    body.follows.forEach (follower) ->
+      snapshot =
+        'timestamp': follower.created_at
+        'username': follower.user.display_name
+      cache.push snapshot
+    client.log.info "#{body.follows.length} preloaded into the follow cache."
+
   # Due to a lack of push functionality in Twitch's API, we use `poll()` to
   # monitor the API's 'follows' endpoint.
   poll = ->
@@ -35,37 +54,21 @@ module.exports = (client) ->
         client.log.error err
         return
 
-      # If this is the first time the script is running (say, after a restart),
-      # set the cache to the initial API response.
-      if !hasRun
-        hasRun = true
-        cache = body.follows
-        return
+      body.follows.forEach (follower) ->
+        snapshot =
+          'timestamp': follower.created_at
+          'username': follower.user.display_name
+        if _.some(cache, snapshot)
+          return
+        cache.push snapshot
+        console.log snapshot
 
-      newFollowers = []
-      body.follows.some (follower) ->
-        if _.isEqual(follower, cache[0])
-          return true
-        newFollowers.push follower
-        return false
-
-      if !newFollowers.length
-        return
-
-      # We have new followers! Let's push them along.
-      client.log.info "#{newFollowers.length} new follower(s)!"
-      newFollowers.forEach (follower) ->
+        # We have new followers! Let's push them along.
         payload =
           'event': 'follow'
-          'timestamp': Date.parse(follower.created_at)
-          'username': follower.user.display_name
-        # discharge payload
-        console.log payload
-      cache = body.follows
-      return
-    # ...
-    return
-
+          'timestamp': Date.parse(snapshot.timestamp)
+          'username': snapshot.username
+        discharge payload
   setInterval(poll, 1000 * 10)  # 10 seconds.
 
   # Firehose: Subscribed
