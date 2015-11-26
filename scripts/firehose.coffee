@@ -45,10 +45,10 @@ module.exports = (client) ->
       newFollowers = []
       body.follows.some (follower) ->
         if _.isEqual(follower, cache[0])
-          client.log.info "#{follower} isEqual..."
+          client.log.info "#{follower.user.display_name} isEqual..."
           return true
         newFollowers.push follower
-        client.log.info "#{follower} added to newFollowers..."
+        client.log.info "#{follower.user.display_name} added to newFollowers..."
         return false
 
       if !newFollowers.length
@@ -56,20 +56,21 @@ module.exports = (client) ->
 
       # We have new followers! Let's push them along.
       client.log.info "#{newFollowers.length} new follower(s)!"
+      client.log.info newFollowers
       newFollowers.forEach (follower) ->
         payload =
           'event': 'follow'
           'timestamp': Date.parse(follower.created_at)
           'username': follower.user.display_name
         # discharge payload
-        client.log.info payload
+        client.log.info "payload: #{payload}"
 
       cache = body.follows
       return
     # ...
     return
 
-  setInterval(poll, 1000 * 60 * 1)  # 1 minute.
+  setInterval(poll, 1000 * 10)  # 10 seconds.
 
   # Firehose: Subscribed
   # TODO: There's a difference between subs and resubs. Address that.
