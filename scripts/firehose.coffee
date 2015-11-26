@@ -45,10 +45,8 @@ module.exports = (client) ->
       newFollowers = []
       body.follows.some (follower) ->
         if _.isEqual(follower, cache[0])
-          client.log.info "#{follower.user.display_name} isEqual..."
           return true
         newFollowers.push follower
-        client.log.info "#{follower.user.display_name} added to newFollowers..."
         return false
 
       if !newFollowers.length
@@ -56,15 +54,13 @@ module.exports = (client) ->
 
       # We have new followers! Let's push them along.
       client.log.info "#{newFollowers.length} new follower(s)!"
-      client.log.info newFollowers
       newFollowers.forEach (follower) ->
         payload =
           'event': 'follow'
           'timestamp': Date.parse(follower.created_at)
           'username': follower.user.display_name
         # discharge payload
-        client.log.info "payload: #{payload}"
-
+        console.log payload
       cache = body.follows
       return
     # ...
