@@ -1,12 +1,10 @@
 _ = require('lodash')
+EventSource = require('eventsource')
 request = require('request')
 
 # Firebase.
 Firebase = require('firebase')
 firebase = new Firebase process.env.FIREBASE_URL
-
-deepEqual = require('deep-equal')
-EventSource = require('eventsource')
 
 # Globals.
 cache = []
@@ -46,7 +44,7 @@ module.exports = (client) ->
 
       newFollowers = []
       body.follows.some (follower) ->
-        if deepEqual(follower, cache[0])
+        if _.isEqual(follower, cache[0])
           return true
         newFollowers.push follower
         return false
@@ -55,14 +53,13 @@ module.exports = (client) ->
         return
 
       # We have new followers! Let's push them along.
-      client.log.info "New follower(s)!"
+      client.log.info "#{newFollowers.length} new follower(s)!"
       newFollowers.forEach (follower) ->
         payload =
           'event': 'follow'
           'timestamp': Date.parse(follower.created_at)
           'username': follower.user.display_name
-        # discharge payload
-        console.log payload
+        discharge payload
 
       cache = body.follows
       return
