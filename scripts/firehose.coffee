@@ -45,8 +45,10 @@ module.exports = (client) ->
       newFollowers = []
       body.follows.some (follower) ->
         if _.isEqual(follower, cache[0])
+          client.log.info "#{follower} isEqual..."
           return true
         newFollowers.push follower
+        client.log.info "#{follower} added to newFollowers..."
         return false
 
       if !newFollowers.length
