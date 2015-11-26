@@ -59,7 +59,8 @@ module.exports = (client) ->
           'event': 'follow'
           'timestamp': Date.parse(follower.created_at)
           'username': follower.user.display_name
-        discharge payload
+        # discharge payload
+        client.log.info payload
 
       cache = body.follows
       return
