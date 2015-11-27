@@ -25,9 +25,8 @@ module.exports = (client) ->
       method: 'GET'
       headers:
         'Accept': 'application/vnd.twitchtv.v3+json'
+      json: true
     }, (err, res, body) ->
-      body = JSON.parse(body)
-
       # Return if the Twitch API eats shit.
       if err
         client.log.error err
@@ -48,8 +47,8 @@ module.exports = (client) ->
       method: 'GET'
       headers:
         'Accept': 'application/vnd.twitchtv.v3+json'
+      json: true
     }, (err, res, body) ->
-      body = JSON.parse(body)
       # Return if the Twitch API eats shit.
       if err
         client.log.error err
