@@ -21,7 +21,7 @@ module.exports = (client) ->
   cache = []
   client.on 'logon', ->
     client.api {
-      url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows?limit=100'
+      url: 'channels/avalonstar/follows?limit=100'
       method: 'GET'
       headers:
         'Accept': 'application/vnd.twitchtv.v3+json'
@@ -43,7 +43,7 @@ module.exports = (client) ->
   # monitor the API's 'follows' endpoint.
   poll = ->
     client.api {
-      url: 'https://api.twitch.tv/kraken/channels/avalonstar/follows'
+      url: 'channels/avalonstar/follows'
       method: 'GET'
       headers:
         'Accept': 'application/vnd.twitchtv.v3+json'
