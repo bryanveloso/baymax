@@ -72,7 +72,6 @@ module.exports = (client) ->
   setInterval(poll, 1000 * 10)  # 10 seconds.
 
   # Firehose: Subscribed
-  # TODO: There's a difference between subs and resubs. Address that.
   client.on 'subscription', (channel, username) ->
     payload =
       'event': 'subscription'
