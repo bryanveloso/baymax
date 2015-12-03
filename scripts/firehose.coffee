@@ -78,7 +78,9 @@ module.exports = (client) ->
       'event': 'subscription'
       'timestamp': _.now()
       'username': username
-    discharge payload
+    request.get "http://avalonstar.tv/api/tickets/#{username.toLowerCase()}/", (err, res, body) ->
+      payload['event'] = 'resubscription' if res.statusCode is 200
+      discharge payload
 
   # Firehose: Substreaked
   client.on 'subanniversary', (channel, username, length) ->
